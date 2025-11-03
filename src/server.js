@@ -1,17 +1,24 @@
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
+import sequelize from "./config/database.js";
+import { Usuario, Producto, Pedido } from "./models/Relaciones.js";
 
 dotenv.config();
 const app = express();
-
-app.use(cors());
 app.use(express.json());
 
-// Ruta de prueba
-app.get("/", (req, res) => {
-  res.send("Servidor del Minimarket J.K funcionando 🚀");
-});
-
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
+
+// Verificar conexión
+sequelize.authenticate()
+  .then(() => console.log("✅ Conexión con PostgreSQL establecida"))
+  .catch(err => console.error("❌ Error al conectar con PostgreSQL:", err));
+
+// Sincronizar tablas (solo al inicio)
+sequelize.sync({ alter: true })
+  .then(() => console.log("🗄️ Tablas sincronizadas correctamente"))
+  .catch(err => console.error("❌ Error al sincronizar tablas:", err));
+
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
+});
