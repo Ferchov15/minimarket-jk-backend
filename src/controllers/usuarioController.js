@@ -64,7 +64,7 @@ export const loginUsuario = async (req, res) => {
       httpOnly: true,
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 2, 
-      secure: false, 
+      secure: true, 
     });
 
     res.json({
@@ -182,7 +182,7 @@ export const logoutUsuario = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
     sameSite: "lax",
-    secure: false, 
+    secure: true, 
   });
 
   res.json({ mensaje: "Sesión cerrada" });
