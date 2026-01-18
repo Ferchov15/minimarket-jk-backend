@@ -7,11 +7,9 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-// Frontends permitidos
 const FRONTEND_URLS = [
   "http://localhost:3000",
-  "http://192.168.1.6:3000",
-  process.env.FRONTEND_URL 
+  "https://minimarket-jk.vercel.app"
 ];
 
 app.use(cors({
@@ -22,10 +20,15 @@ app.use(cors({
       return callback(null, true);
     }
 
+    console.log("CORS bloqueado para:", origin);
     return callback(new Error("No permitido por CORS"));
   },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
+
+app.options("*", cors());
 
 app.use(express.json());
 app.use(cookieParser());
