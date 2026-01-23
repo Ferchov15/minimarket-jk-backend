@@ -7,19 +7,15 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-const FRONTEND_URLS = [
+const allowedOrigins = [
   "http://localhost:3000",
-  "https://minimarket-jk.vercel.app"
-];
+  "https://minimarket-jk.vercel.app",
+  process.env.FRONTEND_URL 
+].filter(Boolean);
 
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
-
-    const allowedOrigins = [
-      "http://localhost:3000",
-      "https://minimarket-jk.vercel.app"
-    ];
 
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -30,13 +26,6 @@ app.use(cors({
   credentials: true,
 }));
 
-
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(204);
-  }
-  next();
-});
 app.use(express.json());
 app.use(cookieParser());
 
